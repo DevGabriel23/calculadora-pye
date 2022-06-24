@@ -1,16 +1,27 @@
 import { Button, ModalContainer, Modal } from "../elements/Form";
 
-const ModalComponent = ({children, isOpen, closeModal}) => {  
+const ModalComponent = ({children, isOpen, closeModal, openModal, id}) => {  
     const onSubmit = () => {
-        if(children[0].props.state.valid === "true" && children[1].props.state.valid === "true"){
-            closeModal();
+        console.log(children);
+        for(let i = 0; i<children.lenght ; i++){
+            if(children[i].props.state.valid === "true"){
+                closeModal();
+            }else{
+                openModal();
+            }
         }
+        // closeModal();
     }
+    
+    const onClick = () =>{
+        closeModal();
+    }
+
     return (
         <Modal isOpen={isOpen}>
             <ModalContainer>
                 {children}
-                <Button type="submit" style={{marginTop:"10px"}} onClick={onSubmit}>Guardar</Button>
+                <Button type="submit" style={{marginTop:"10px"}} onClick={(id === "0" ? onSubmit : onClick)}>Guardar</Button>
             </ModalContainer>
         </Modal>
     );

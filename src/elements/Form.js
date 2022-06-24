@@ -229,12 +229,14 @@ const Modal = styled.div`
     min-height: 100vh;
     background: rgba(0, 0, 0, 0.75);
     z-index: 999;
-    display: none;
     justify-content: center;
     align-items: center;
     
     ${props => props.isOpen === 'true' && css`
         display: flex;
+    `}
+    ${props => props.isOpen === 'false' && css`
+        display: none;
     `}
 `;
 

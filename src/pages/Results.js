@@ -12,7 +12,8 @@ export default function Results({ data, array }) {
 
     const [amplitud, setAmplitud] = useState({ content: "", valid: "" });
     const [unidadVariacion, setUnidadVariacion] = useState({ content: "", valid: "" });
-    const [isOpen1, closeModal1] = useModal("true");
+    const [isOpen1, openModal1, closeModal1] = useModal("true");
+    const [isOpen2, openModal2, closeModal2] = useModal();
 
     const [mediaDatosAgrupados, setMediaDatosAgrupados] = useState({ content: "", valid: "" });
     const [medianaDatosAgrupados, setMedianaDatosAgrupados] = useState({ content: "", valid: "" });
@@ -87,12 +88,12 @@ export default function Results({ data, array }) {
     if (dataType === "1") { //Agrupados
         k = arrayNumber.length;
         uv = arrayNumber[1].limInf - arrayNumber[0].limSup;
-        if(uv === 0){
+        if (uv === 0) {
             limInfExacto = arrayNumber[0].limInf;
-            limSupExacto = arrayNumber[arrayNumber.length-1].limSup;
-        }else{
-            limInfExacto = arrayNumber[0].limInf - uv/2;
-            limSupExacto = arrayNumber[arrayNumber.length-1].limSup + uv/2;
+            limSupExacto = arrayNumber[arrayNumber.length - 1].limSup;
+        } else {
+            limInfExacto = arrayNumber[0].limInf - uv / 2;
+            limSupExacto = arrayNumber[arrayNumber.length - 1].limSup + uv / 2;
         }
         r = limSupExacto - limInfExacto;
         amp = Math.round(r / k);
@@ -277,31 +278,32 @@ export default function Results({ data, array }) {
     }
 
     return (
-        <div>{dataType === "2" ?
-            <Modal isOpen={isOpen1} closeModal={closeModal1}>
-                <Input
-                    state={amplitud}
-                    setState={setAmplitud}
-                    type="text"
-                    label="Amplitud a usar"
-                    placeholder={"Amplitud calculada: " + amp_calc}
-                    name="amp_calc"
-                    errorMsg="No es un número"
-                    regularExp={num}
-                    onlyRead={"false"}
-                />
-                <Input
-                    state={unidadVariacion}
-                    setState={setUnidadVariacion}
-                    type="text"
-                    label="Unidad de variación"
-                    placeholder="Unidad de variación"
-                    name="unidadVariacion"
-                    errorMsg="No es un número"
-                    regularExp={num}
-                    onlyRead={"false"}
-                />
-            </Modal> : null}
+        <div>
+            {dataType === "2" ?
+                <Modal isOpen={isOpen1} closeModal={closeModal1} openModal={openModal1} id="input">
+                    <Input
+                        state={amplitud}
+                        setState={setAmplitud}
+                        type="text"
+                        label="Amplitud a usar"
+                        placeholder={"Amplitud calculada: " + amp_calc}
+                        name="amp_calc"
+                        errorMsg="No es un número"
+                        regularExp={num}
+                        onlyRead={"false"}
+                    />
+                    <Input
+                        state={unidadVariacion}
+                        setState={setUnidadVariacion}
+                        type="text"
+                        label="Unidad de variación"
+                        placeholder="Unidad de variación"
+                        name="unidadVariacion"
+                        errorMsg="No es un número"
+                        regularExp={num}
+                        onlyRead={"false"}
+                    />
+                </Modal> : null}
             <main>
                 <Formulario id="form" dType={arrayDataFinal.length > 0 ? "1" : "0"}>
                     <Title>Resultados</Title>
@@ -332,9 +334,9 @@ export default function Results({ data, array }) {
                                         </thead>
                                         <tbody>
                                             {arrayDataFinal.map((element, index) => {
-                                                return (  
-                                                    <tr key={index}> {/*style={{ display: (element[3] === 0 ? "none" : "default") }}*/} 
-                                                    <td>{String.fromCharCode(65 + index)}</td>
+                                                return (
+                                                    <tr key={index}> {/*style={{ display: (element[3] === 0 ? "none" : "default") }}*/}
+                                                        <td>{String.fromCharCode(65 + index)}</td>
                                                         <td>{Number.isInteger(element[0]) ? element[0] : parseFloat(element[0]).toFixed(4)}</td> {/* Limite inferior */}
                                                         <td>{Number.isInteger(element[1]) ? element[1] : parseFloat(element[1]).toFixed(4)}</td> {/* Limite superior */}
                                                         <td>{Number.isInteger(element[4]) ? element[4] : parseFloat(element[4]).toFixed(4)}</td> {/* Limite inferior exacto */}
@@ -351,16 +353,21 @@ export default function Results({ data, array }) {
                                     </Table>
                                 </TableContainer>
                             </TableContainer>
-                            <Title style={{fontSize:"16px", fontWeight:"600"}}>{dataType == "2" ? "Datos ordenados: " + (arrayNumber.map((element, index) =>{ return(element) })) : null}</Title>
+                            <Title style={{ fontSize: "16px", fontWeight: "600" }}>{dataType == "2" ? "Datos ordenados: " + (arrayNumber.map((element, index) => { return (element) })) : null}</Title>
                             <p>Numero de clases: {k}</p>
                             <p>Numero de datos: {arrayDataFinal[arrayDataFinal.length - 1][7]}</p>
                             <p>Rango: {r.toFixed(4)}</p>
                             <p>Amplitud: {amp}</p>
+                            <Button onClick={openModal2}>Abrir</Button>
+                            <Modal openModal={openModal2} closeModal={closeModal2} isOpen={isOpen2} id="">
+                                <p>Hola</p>
+                            </Modal>
                         </> :
                         <>
                             <h2 style={{ gridColumn: "span 2" }}>Oops... deberías registrar datos primero</h2>
                             <Link to={"/"} style={{ width: "100%" }}><Button style={{ background: "#475469" }}>Volver</Button></Link>
                         </>}
+                        <p>Hola</p>
                 </Formulario>
 
                 {arrayDataFinal.length > 0 && typeof (arrayDataFinal[0][0]) !== "undefined" ?

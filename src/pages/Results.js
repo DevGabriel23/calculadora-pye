@@ -3,11 +3,11 @@ import { ModalComponent as Modal } from "../components/Modal";
 import Input from '../components/Input';
 import { useModal } from "../elements/useModal";
 import '../components/Main.css';
-import { TableContainer, Table, Formulario, colors, Button, Title, Subtitle } from "../elements/Form";
+import { TableContainer, Table, Formulario, colors, Button, Title, Subtitle, GroupInput, Label, ButtonContainer } from "../elements/Form";
 import { Link, Navigate, NavLink } from "react-router-dom";
 import Home from "./Home";
 
-export default function Results({ data, array }) {
+export default function Results({ data, array}) {
 
 
     const [amplitud, setAmplitud] = useState({ content: "", valid: "" });
@@ -27,6 +27,7 @@ export default function Results({ data, array }) {
     const [desviacionEstandar, setDesviacionEstandar] = useState("");
     const [varianza, setVarianza] = useState("");
     const [coeficienteVariacion, setCoeficienteVariacion] = useState("");
+    const [option, setOption] = useState("");
 
 
     const [arrayDataFinal, setArrayDataFinal] = useState([]);
@@ -277,6 +278,14 @@ export default function Results({ data, array }) {
         }
     }
 
+    const setOptions = (e) => {
+        console.log("texto");
+        e.preventDefault();
+        
+        // setOption({e.target.elements.option.value})
+        console.log(e.target);
+    }
+
     return (
         <div>
             {dataType === "2" ?
@@ -358,16 +367,16 @@ export default function Results({ data, array }) {
                             <p>Numero de datos: {arrayDataFinal[arrayDataFinal.length - 1][7]}</p>
                             <p>Rango: {r.toFixed(4)}</p>
                             <p>Amplitud: {amp}</p>
-                            <Button onClick={openModal2}>Abrir</Button>
-                            <Modal openModal={openModal2} closeModal={closeModal2} isOpen={isOpen2} id="">
-                                <p>Hola</p>
+                            <Button type="button" onClick={openModal2}>Abrir</Button>
+                            <Modal openModal={openModal2} closeModal={closeModal2} isOpen={isOpen2} id="" setOptions={setOptions}>
+                                
                             </Modal>
                         </> :
                         <>
                             <h2 style={{ gridColumn: "span 2" }}>Oops... deberías registrar datos primero</h2>
                             <Link to={"/"} style={{ width: "100%" }}><Button style={{ background: "#475469" }}>Volver</Button></Link>
                         </>}
-                        <p>Hola</p>
+                    <p>Hola</p>
                 </Formulario>
 
                 {arrayDataFinal.length > 0 && typeof (arrayDataFinal[0][0]) !== "undefined" ?
